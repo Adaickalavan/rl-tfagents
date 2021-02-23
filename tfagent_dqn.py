@@ -29,20 +29,20 @@ from tf_agents.utils.common import function, Checkpointer
 def main(_):
     # Environment
     env_name = "Breakout-v4"
-    train_num_parallel_environments=4
-    max_steps_per_episode = 1000
+    train_num_parallel_environments=5
+    max_steps_per_episode=1000
     # Replay buffer
-    replay_buffer_capacity = 50000
-    init_replay_buffer = 500
+    replay_buffer_capacity=50000
+    init_replay_buffer=500
     # Driver
-    collect_steps_per_iteration = 1 * train_num_parallel_environments
+    collect_steps_per_iteration=1 * train_num_parallel_environments
     # Training
-    train_batch_size = 32
-    train_iterations = 100000
+    train_batch_size=32
+    train_iterations=100000
     train_summary_interval=200
     train_checkpoint_interval=200
     # Evaluation
-    eval_num_parallel_environments=1
+    eval_num_parallel_environments=5
     eval_summary_interval=500
     eval_num_episodes=20
     # File paths
