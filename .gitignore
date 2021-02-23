@@ -1,0 +1,5 @@
+certs
+checkpoint
+ckpt-*
+events.out.tfevents.*
+.venv
