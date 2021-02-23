@@ -162,7 +162,7 @@ def main(_):
     init_driver = DynamicStepDriver(
                     tf_env,
                     initial_collect_policy,
-                    observers=[replay_buffer_observer, ShowProgress(init_replay_buffer)],
+                    observers=[replay_buffer_observer, ShowProgress()],
                     num_steps=init_replay_buffer)
     final_time_step, final_policy_state = init_driver.run()
 
@@ -324,14 +324,13 @@ def evaluate(
 
 # Observer: Show progress
 class ShowProgress:
-    def __init__(self, total):
+    def __init__(self):
         self.counter = 0
-        self.total = total
     def __call__(self, trajectory):
         if not trajectory.is_boundary()[0]:
             self.counter += 1 
         if self.counter % 100 == 0:
-            print(f"\rInitialize replay buffer: {self.counter}/{self.total}", end="")
+            print(f"\rInitialize replay buffer: {self.counter}", end="")
 
 
 if __name__ == '__main__':

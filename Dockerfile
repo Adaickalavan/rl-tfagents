@@ -1,12 +1,10 @@
 FROM tensorflow/tensorflow:2.4.0-gpu
 
-# (Optional) Install certificates
-RUN apt-get install -y \ 
-        ca-certificates \
-        apt-transport-https \
-    && rm -rf /var/lib/apt/lists/*
-COPY ./certs/ /usr/local/share/ca-certificates/extra/
-RUN update-ca-certificates
+ARG DEBIAN_FRONTEND=noninteractive
+
+# (Optional) Disable certificate verification
+RUN touch /etc/apt/apt.conf.d/99verify-peer.conf && \
+    echo >>/etc/apt/apt.conf.d/99verify-peer.conf "Acquire { https::Verify-Peer false }"
 
 # Install dependencies
 RUN apt-get update --fix-missing && \
@@ -36,11 +34,6 @@ RUN apt-get update --fix-missing && \
 # Update default python version
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
 
-# Install pip
-RUN wget https://bootstrap.pypa.io/get-pip.py -O get-pip.py && \
-    python get-pip.py && \
-    pip install --upgrade pip
-
 # Setup DISPLAY
 ENV DISPLAY :1
 # VOLUME /tmp/.X11-unix
@@ -51,18 +44,23 @@ RUN wget -O /etc/X11/xorg.conf http://xpra.org/xorg.conf && \
 ENV SUMO_HOME /usr/share/sumo
 
 # Setup user
-ARG USER_ID
-ARG GROUP_ID
-RUN addgroup --gid $GROUP_ID user && \
-    adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
-USER user
+# ARG USER_ID
+# ARG GROUP_ID
+# RUN addgroup --gid $GROUP_ID user && \
+#     adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
+# USER user
+
+# Install requirements.txt
+ENV PATH /root/.local/bin:$PATH
+RUN python3.7 -m pip install --user --no-cache --upgrade pip
+COPY requirements.txt /tmp/requirements.txt
+RUN python3.7 -m pip install --user --no-cache -r /tmp/requirements.txt
+
+# Copy source files
+COPY . /src
 
 # Setup workdir
 WORKDIR /src
-
-# Copy source files and install dependencies
-COPY . /src
-# RUN pip install -r ${workdir}/requirements.txt
 
 # Entrypoint
 SHELL ["/bin/bash", "-c", "-l"]
