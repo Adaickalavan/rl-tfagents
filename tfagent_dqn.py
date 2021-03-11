@@ -322,6 +322,36 @@ def evaluate(
 
     return compute
 
+# This function is under development/consideration
+# Evaluation v2
+# def evaluate_v2(
+#         eval_metrics,
+#         eval_tf_env,
+#         eval_policy,
+#         eval_num_episodes,
+#         train_step,
+#         eval_summary_writer):
+
+#     def compute():
+#         total_return = 0.0
+
+#         for _ in range(eval_num_episodes):
+#             time_step = eval_tf_env.reset()
+#             episode_return = 0.0
+
+#             while not time_step.is_last()[0]:
+#                 action_step = eval_policy.action(time_step)
+#                 time_step = eval_tf_env.step(action_step.action)
+#                 episode_return += time_step.reward
+            
+#             total_return += episode_return
+#         avg_return = total_return / eval_num_episodes
+#         print(f"Average return: {avg_return.numpy()[0]}")
+
+#         return avg_return.numpy()[0]
+
+#     return compute
+
 # Observer: Show progress
 class ShowProgress:
     def __init__(self):
