@@ -1,6 +1,9 @@
 box2d-py
+gym
 gym[atari]==0.18.0
+matplotlib
 numpy==1.19.2
 six==1.15.0
 tensorflow==2.4.0
 tf-agents==0.7.1
+tqdm
